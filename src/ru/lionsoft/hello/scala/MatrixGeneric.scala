@@ -41,8 +41,8 @@ class MatrixGeneric[T : Numeric : ClassTag](val rows: Int, val cols: Int) {
   }
 
   override def hashCode(): Int = {
-    val state = Seq(dat, rows, cols)
-    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+    val state = Seq(rows, cols).concat(dat)
+    state.map(_.hashCode()).foldLeft(3)(31 * _ + _)
   }
 }
 
