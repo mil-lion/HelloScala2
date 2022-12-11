@@ -100,9 +100,9 @@ class Matrix(val rows: Int, val cols: Int) {
   override def equals(other: Any): Boolean = other match {
     case that: Matrix =>
       (that canEqual this) &&
-        (dat sameElements that.dat) &&
         rows == that.rows &&
-        cols == that.cols
+        cols == that.cols &&
+        (dat sameElements that.dat)
     case _ => false
   }
 

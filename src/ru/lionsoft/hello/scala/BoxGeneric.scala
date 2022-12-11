@@ -7,21 +7,23 @@ package ru.lionsoft.hello.scala
  * @param h высота коробки
  * @param l длина коробки
  */
-class BoxGeneric[T : Numeric](private var w: T = 1,
-                              private var h: T = 1,
-                              private var l: T = 1)
-  extends Serializable //with Ordered[BoxGeneric[T]]
+class BoxGeneric[T : Numeric](private var w: T,
+                              private var h: T,
+                              private var l: T)(implicit num: Numeric[T])
+  extends Serializable with Ordered[BoxGeneric[T]]
 {
   // Default Constructor Body
-//  if (w <= 0) throw new IllegalArgumentException("width <= 0")
-//  if (h <= 0) throw new IllegalArgumentException("height <= 0")
-//  if (l <= 0) throw new IllegalArgumentException("length <= 0")
+  if (num.toDouble(w) <= 0) throw new IllegalArgumentException("width <= 0")
+  if (num.toDouble(h) <= 0) throw new IllegalArgumentException("height <= 0")
+  if (num.toDouble(l) <= 0) throw new IllegalArgumentException("length <= 0")
 
   /**
    * Конструктор кубической коробки
-   * @param size
+   * @param size размер коробки
    */
-  def this(size: T) = this(size, size, size)
+//  def this(size: T) = {
+//    this(size, size, size)
+//  }
 
   /**
    * Конструктор коробки стандартного типоразмера
@@ -39,16 +41,22 @@ class BoxGeneric[T : Numeric](private var w: T = 1,
 
   // Getters & Setters
   def width = w
-  def width_= (width: T) = w = width
-//    if (width > 0) w = width else throw new IllegalArgumentException("width <= 0")
+  def width_= (width: T) = {
+    if (num.toDouble(width) <= 0) throw new IllegalArgumentException("width <= 0")
+    w = width
+  }
 
   def height = h
-  def height_= (height: T) = h = height
-//    if (height > 0) h = height else throw new IllegalArgumentException("height <= 0")
+  def height_= (height: T) = {
+    if (num.toDouble(height) <= 0) throw new IllegalArgumentException("height <= 0")
+    h = height
+  }
 
   def length = l
-  def length_= (length: T) = l = length
-//    if (length > 0) l = length else throw new IllegalArgumentException("length <= 0")
+  def length_= (length: T) = {
+    if (num.toDouble(length) <= 0) throw new IllegalArgumentException("length <= 0")
+    l = length
+  }
 
   def apply(): (T, T, T) = (w, h, l)
   def update(value: (T, T, T)): Unit = {
@@ -81,15 +89,19 @@ class BoxGeneric[T : Numeric](private var w: T = 1,
    * Получить периметр коробки
    * @return
    */
-//  def perimeter = Box.perimeter(w, h, l)
-//  def squareSurface = Box.squareSurface(w, h, l)
-//  def volume = Box.volume(w, h, l)
+  def perimeter: Double = Box.perimeter(num.toDouble(w), num.toDouble(h), num.toDouble(l))
+  def squareSurface: Double = Box.squareSurface(num.toDouble(w), num.toDouble(h), num.toDouble(l))
+  def volume: Double = Box.volume(num.toDouble(w), num.toDouble(h), num.toDouble(l))
 
   // Methods
   def open = println("Открыли коробку!")
   def close = println("Закрыли коробку!")
 
   // Compare by Volume
-//  override def compare(that: BoxGeneric): Int = volume - that.volume
+  override def compare(that: BoxGeneric[T]): Int = {
+    if (this eq that) return 0
+    if (that == null) return 1
+    volume.compare(that.volume)
+  }
 }
 

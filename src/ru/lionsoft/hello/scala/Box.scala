@@ -90,7 +90,7 @@ class Box(private var w: Int = 1,
   def close = println("Закрыли коробку!")
 
   // Compare by Volume
-  override def compare(that: Box): Int = volume - that.volume
+  override def compare(that: Box): Int = volume.compare(that.volume)
 }
 
 // Java static
@@ -127,20 +127,20 @@ object Box {
 
   /**
    * Развертывание коробки на параметры: (ширина, высота, длина)
-   * @param box
-   * @return
+   * @param box ссылка на коробку
+   * @return кортеж параметров (ширина, высота, длина)
    */
   def unapply(box: Box): Option[(Int, Int, Int)] = Option(box.width, box.height, box.length)
 
   // static function
   /**
    * Вычислить периметр коробки
-   * @param width
-   * @param height
-   * @param length
-   * @return
+   * @param width ширина коробки
+   * @param height высота коробки
+   * @param length длина коробки
+   * @return периметр коробки (длина ребер)
    */
-  def perimeter(width: Int, height: Int, length: Int) = (width + height + length) * 4
-  def squareSurface(width: Int, height: Int, length: Int) = (width * height + width * length + height * length) * 2
-  def volume(width: Int, height: Int, length: Int) = width * height * length
+  def perimeter(width: Double, height: Double, length: Double) = (width + height + length) * 4
+  def squareSurface(width: Double, height: Double, length: Double) = (width * height + width * length + height * length) * 2
+  def volume(width: Double, height: Double, length: Double) = width * height * length
 }

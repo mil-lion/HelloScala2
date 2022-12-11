@@ -1,6 +1,5 @@
 package ru.lionsoft.hello.scala
 
-import javax.management.Notification
 import scala.util.Random
 
 object Lab4 {
@@ -188,10 +187,11 @@ object Lab4 {
     val gb2 = new BoxGeneric[Long](1, 2, 3)
     val gb3 = new BoxGeneric[Float](1.5f, 2.3f, 3.4f)
 //    val gb4 = new BoxGeneric[String]("width", "height", "length")
-    println(gb1)
-    println(gb2)
-    println(gb3)
-//    println(gb4)
+
+    println(s"gb1 = $gb1 (${gb1.##})")
+    println(s"gb2 = $gb2 (${gb2.##})")
+    println(s"gb3 = $gb3 (${gb3.##})")
+//    println(s"gb4 = $gb4 (${gb4.##})")
 
     // ################## for with if #############
     val planetNames = for (p <- planetDistanceFromSun if p._2 > 120) yield p._1

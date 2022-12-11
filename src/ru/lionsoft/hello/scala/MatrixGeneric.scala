@@ -34,9 +34,9 @@ class MatrixGeneric[T : Numeric : ClassTag](val rows: Int, val cols: Int) {
   override def equals(other: Any): Boolean = other match {
     case that: MatrixGeneric[T] =>
       (that canEqual this) &&
-        (dat sameElements that.dat) &&
         rows == that.rows &&
-        cols == that.cols
+        cols == that.cols &&
+        (dat sameElements that.dat)
     case _ => false
   }
 
@@ -44,6 +44,27 @@ class MatrixGeneric[T : Numeric : ClassTag](val rows: Int, val cols: Int) {
     val state = Seq(rows, cols).concat(dat)
     state.map(_.hashCode()).foldLeft(3)(31 * _ + _)
   }
+
+  def fill(f: (Int, Int) => T): Unit =
+    for (row <- 0 until rows; col <- 0 until cols)
+      dat(idx(row, col)) = f(row, col)
+
+  def map(f: (T) => T): MatrixGeneric[T] = {
+    val newMatrix = new MatrixGeneric[T](rows, cols)
+    for (i <- dat.indices)
+      newMatrix.dat(i) = f(dat(i))
+    newMatrix
+  }
+
+  def combine(that: MatrixGeneric[T], f: (T, T) => T): MatrixGeneric[T] = {
+    if (rows != that.rows || cols != that.cols)
+      throw new IllegalArgumentException("Матрицы должны быть одного размера")
+    val newMatrix = new MatrixGeneric[T](rows, cols)
+    for (i <- dat.indices)
+      newMatrix.dat(i) = f(this.dat(i), that.dat(i))
+    newMatrix
+  }
+
 }
 
 object MatrixGeneric {
